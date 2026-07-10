@@ -7,7 +7,7 @@ constexpr int SCREEN_HEIGHT = 600;
 constexpr int HALF_SCREEN_WIDTH = SCREEN_WIDTH >> 1;
 constexpr int HALF_SCREEN_HEIGHT = SCREEN_HEIGHT >> 1;
 
-constexpr char OBJECTS_COUNT = 6;
+constexpr char OBJECTS_COUNT = 8;
 constexpr float DEFAULT_MINIMUM_OBJ_GAP = 425.0f;
 constexpr float DEFAULT_MAXIMUM_OBJ_GAP = 625.0f;
 

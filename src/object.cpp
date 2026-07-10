@@ -1,29 +1,24 @@
 #include "defines.h"
 
-struct Object
+struct ObjectData
 {
-    float x = 0;
-    float y = 0;
-    float positionX = SCREEN_WIDTH;
-    float positionY = HALF_SCREEN_HEIGHT;
+    alignas(16) float x[OBJECTS_COUNT] = {0};
+    alignas(16) float y[OBJECTS_COUNT] = {0};
+    alignas(16) float positionX[OBJECTS_COUNT] = {0};
+    alignas(16) float positionY[OBJECTS_COUNT] = {0};
 
-    float width;
-    float height;
+    alignas(16) float width[OBJECTS_COUNT] = {0};
+    alignas(16) float height[OBJECTS_COUNT] = {0};
 
-    int currentObjectType = None;
+    int currentObjectType[OBJECTS_COUNT] = {None};
 
-    float getRenderWidth() const
+    float getRenderWidth(int index) const
     {
-        return (currentObjectType == CACTI_LARGE_FOUR || currentObjectType == CACTI_LARGE_THREE || currentObjectType == FLYING_DINO) ? width * 0.5f : width * 0.6f;
+        return (currentObjectType[index] == CACTI_LARGE_FOUR || currentObjectType[index] == CACTI_LARGE_THREE || currentObjectType[index] == FLYING_DINO) ? width[index] * 0.5f : width[index] * 0.6f;
     }
 
-    float getRenderHeight() const
+    float getRenderHeight(int index) const
     {
-        return (currentObjectType == CACTI_LARGE_FOUR || currentObjectType == CACTI_LARGE_THREE || currentObjectType == FLYING_DINO) ? height * 0.5f : height * 0.6f;
-    }
-
-    void update(const float &dt, const float &gameSpeed)
-    {
-        positionX -= gameSpeed * dt;
+        return (currentObjectType[index] == CACTI_LARGE_FOUR || currentObjectType[index] == CACTI_LARGE_THREE || currentObjectType[index] == FLYING_DINO) ? height[index] * 0.5f : height[index] * 0.6f;
     }
 };

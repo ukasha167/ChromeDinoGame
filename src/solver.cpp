@@ -8,7 +8,7 @@
 
 Dino Solver::dino;
 Background Solver::bg[2];
-Object Solver::objects[OBJECTS_COUNT];
+ObjectData Solver::objects;
 
 bool Solver::startAnimation(const float &dt)
 {
@@ -38,7 +38,7 @@ void Solver::initGamePositions()
 
 void Solver::recyleObject()
 {
-    if (objects[FIRST_OBJECT].positionX + objects[FIRST_OBJECT].getRenderWidth() > 0)
+    if (objects.positionX[FIRST_OBJECT] + objects.getRenderWidth(FIRST_OBJECT) > 0)
     {
         return;
     }
@@ -50,67 +50,67 @@ void Solver::recyleObject()
 void Solver::spawnObject(const int &index)
 {
     int randomGap = GetRandomValue(minimumGapX, maximumGapX);
-    objects[index].positionX = objects[(index + OBJECTS_COUNT - 1) % OBJECTS_COUNT].positionX + randomGap;
+    objects.positionX[index] = objects.positionX[(index + OBJECTS_COUNT - 1) % OBJECTS_COUNT] + randomGap;
 
     int type = GetRandomValue(1, (int)objectSpawnProbability);
 
     switch (type)
     {
     case CACTUS_SMALL_ONE:
-        objects[index].currentObjectType = CACTUS_SMALL_ONE;
-        objects[index].x = 446;
-        objects[index].y = 2;
-        objects[index].width = 34;
-        objects[index].height = 70;
-        objects[index].positionY = bg[0].positionY - objects[index].getRenderHeight() + 30;
+        objects.currentObjectType[index] = CACTUS_SMALL_ONE;
+        objects.x[index] = 446;
+        objects.y[index] = 2;
+        objects.width[index] = 34;
+        objects.height[index] = 70;
+        objects.positionY[index] = bg[0].positionY - objects.getRenderHeight(index) + 30;
         break;
 
     case CACTI_SMALL_TWO:
-        objects[index].currentObjectType = CACTI_SMALL_TWO;
-        objects[index].x = 446;
-        objects[index].y = 2;
-        objects[index].width = 68;
-        objects[index].height = 70;
-        objects[index].positionY = bg[0].positionY - objects[index].getRenderHeight() + 30;
+        objects.currentObjectType[index] = CACTI_SMALL_TWO;
+        objects.x[index] = 446;
+        objects.y[index] = 2;
+        objects.width[index] = 68;
+        objects.height[index] = 70;
+        objects.positionY[index] = bg[0].positionY - objects.getRenderHeight(index) + 30;
         break;
 
     case CACTI_LARGE_THREE:
-        objects[index].currentObjectType = CACTI_LARGE_THREE;
-        objects[index].x = 652;
-        objects[index].y = 2;
-        objects[index].width = 150;
-        objects[index].height = 98;
-        objects[index].positionY = bg[0].positionY - objects[index].getRenderHeight() + 30;
+        objects.currentObjectType[index] = CACTI_LARGE_THREE;
+        objects.x[index] = 652;
+        objects.y[index] = 2;
+        objects.width[index] = 150;
+        objects.height[index] = 98;
+        objects.positionY[index] = bg[0].positionY - objects.getRenderHeight(index) + 30;
         break;
 
     case CACTI_LARGE_FOUR:
-        objects[index].currentObjectType = CACTI_LARGE_FOUR;
-        objects[index].x = 802;
-        objects[index].y = 2;
-        objects[index].width = 150;
-        objects[index].height = 98;
-        objects[index].positionY = bg[0].positionY - objects[index].getRenderHeight() + 30;
+        objects.currentObjectType[index] = CACTI_LARGE_FOUR;
+        objects.x[index] = 802;
+        objects.y[index] = 2;
+        objects.width[index] = 150;
+        objects.height[index] = 98;
+        objects.positionY[index] = bg[0].positionY - objects.getRenderHeight(index) + 30;
         break;
 
     case FLYING_DINO:
-        objects[index].currentObjectType = FLYING_DINO;
-        objects[index].x = 260;
-        objects[index].y = 2;
-        objects[index].width = 92;
-        objects[index].height = 80;
+        objects.currentObjectType[index] = FLYING_DINO;
+        objects.x[index] = 260;
+        objects.y[index] = 2;
+        objects.width[index] = 92;
+        objects.height[index] = 80;
 
         int objHeight = GetRandomValue(0, 2);
         if (objHeight == 0)
         {
-            objects[index].positionY = (bg[0].positionY - objects[index].getRenderHeight()) - 35;
+            objects.positionY[index] = (bg[0].positionY - objects.getRenderHeight(index)) - 35;
         }
         else if (objHeight == 1)
         {
-            objects[index].positionY = (bg[0].positionY - objects[index].getRenderHeight()) - 10;
+            objects.positionY[index] = (bg[0].positionY - objects.getRenderHeight(index)) - 10;
         }
         else
         {
-            objects[index].positionY = (bg[0].positionY - objects[index].getRenderHeight()) + 15;
+            objects.positionY[index] = (bg[0].positionY - objects.getRenderHeight(index)) + 15;
         }
 
         break;
@@ -125,7 +125,7 @@ void Solver::updateGame(const float &dt)
 
     for (unsigned char i = 0; i < OBJECTS_COUNT; i++)
     {
-        objects[i].update(dt, gameSpeed);
+        objects.positionX[i] -= gameSpeed * dt;
     }
 }
 
@@ -154,15 +154,15 @@ void Solver::updatePlayerStates(const float &dt)
     // FLYING DINO STATES ARE ONLY TWO, WE ALTERNATE BETWEEN THOSE TWO BASED ON EVEN/ODD
     for (unsigned char i = 0; i < OBJECTS_COUNT; i++)
     {
-        if (objects[i].currentObjectType == FLYING_DINO)
+        if (objects.currentObjectType[i] == FLYING_DINO)
         {
             if (int(playerStateIterator) % 2)
             {
-                objects[i].x = 260;
+                objects.x[i] = 260;
             }
             else
             {
-                objects[i].x = 352;
+                objects.x[i] = 352;
             }
         }
     }
@@ -175,7 +175,7 @@ void Solver::updatePlayerStates(const float &dt)
 
 void Solver::updateScore()
 {
-    if (objects[CURRENT_OBJECT].positionX + objects[CURRENT_OBJECT].getRenderWidth() >= dino.positionX)
+    if (objects.positionX[CURRENT_OBJECT] + objects.getRenderWidth(CURRENT_OBJECT) >= dino.positionX)
     {
         return;
     }
@@ -195,7 +195,7 @@ void Solver::updateScore()
 bool Solver::checkCollisions()
 {
     Rectangle player = {dino.positionX, dino.getPositionY(), dino.getRenderingWidth(), dino.getRenderingHeight()};
-    Rectangle obj = {objects[CURRENT_OBJECT].positionX, objects[CURRENT_OBJECT].positionY, objects[CURRENT_OBJECT].getRenderWidth(), objects[CURRENT_OBJECT].getRenderHeight()};
+    Rectangle obj = {objects.positionX[CURRENT_OBJECT], objects.positionY[CURRENT_OBJECT], objects.getRenderWidth(CURRENT_OBJECT), objects.getRenderHeight(CURRENT_OBJECT)};
 
     if (CheckCollisionRecs(player, obj))
     {
@@ -227,7 +227,7 @@ void Solver::reset()
     dino.setDefaultPositionY();
     for (int i = 0; i < OBJECTS_COUNT; i++)
     {
-        objects[i].positionX = SCREEN_WIDTH;
+        objects.positionX[i] = SCREEN_WIDTH;
     }
 
     initGamePositions();

@@ -7,7 +7,7 @@
 #include "defines.h"
 
 class Dino;
-class Object;
+class ObjectData;
 class Background;
 
 class Solver
@@ -39,7 +39,7 @@ private:
 public:
     static Dino dino;
     static Background bg[2];
-    static Object objects[OBJECTS_COUNT];
+    static ObjectData objects;
 
     inline static GameStates currentGameState = Menu;
     inline static Rectangle *currentPlayerState = &playerStates[3]; // BY DEFAULT IT IS SET TO STARTING ANIMATION WHICH IS JUMPING

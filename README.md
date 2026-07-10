@@ -6,7 +6,9 @@ A hardware-accelerated, lightweight, and faithful clone of the iconic Google Chr
 
 ## Features
 
-- **Modern C++23**: Leverages modern C++ standards, clean object-oriented architecture, and structured game loop mechanics.
+- **Data-Oriented Design (DOD)**: Core entities utilize a Structure of Arrays (SoA) layout to maximize cache coherency and data throughput.
+- **Cross-Platform SIMD Acceleration**: Leverages compiler auto-vectorization over aligned contiguous memory blocks. Generates SIMD instructions (SSE/AVX/Neon) during release builds without tying the codebase to architecture-specific intrinsic headers.
+- **Modern C++23**: Leverages modern C++ standards and structured game loop mechanics.
 - **Raylib Rendering**: Hardware-accelerated graphics targeting smooth 144 FPS with low CPU overhead.
 - **Automatic Dependency Resolution**: Utilizes CMake's `FetchContent` to download, build, and link Raylib 5.0 automatically.
 - **Dynamic Difficulty Scaling**: Game speed, obstacle spawn probability, and horizontal gaps scale gradually as the player's score increases.

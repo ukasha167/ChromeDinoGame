@@ -28,7 +28,7 @@ void Renderer::unloadAssets()
     UnloadTexture(sprite);
 }
 
-void Renderer::drawScene(const int &currentGameState, const int &currentScore, const int &highScore, const Dino &dino, const Rectangle *const currentPlayerState, const Background (&bg)[2], const Object (&objects)[OBJECTS_COUNT])
+void Renderer::drawScene(const int &currentGameState, const int &currentScore, const int &highScore, const Dino &dino, const Rectangle *const currentPlayerState, const Background (&bg)[2], const ObjectData &objects)
 {
     switch (currentGameState)
     {
@@ -54,11 +54,11 @@ void Renderer::drawScene(const int &currentGameState, const int &currentScore, c
 
     for (unsigned char i = 0; i < OBJECTS_COUNT; i++)
     {
-        DrawRectangleLinesEx({objects[i].positionX, objects[i].positionY, objects[i].getRenderWidth(), objects[i].getRenderHeight()}, 2.0f, RED);
+        DrawRectangleLinesEx({objects.positionX[i], objects.positionY[i], objects.getRenderWidth(i), objects.getRenderHeight(i)}, 2.0f, RED);
     }
 }
 
-void Renderer::drawMenu(const int &currentScore, const int &highScore, const Dino &dino, const Rectangle *const currentDinoState, const Background (&bg)[2], const Object (&objects)[OBJECTS_COUNT])
+void Renderer::drawMenu(const int &currentScore, const int &highScore, const Dino &dino, const Rectangle *const currentDinoState, const Background (&bg)[2], const ObjectData &objects)
 {
     // DrawTexturePro(Texture2D texture, Rectangle source, Rectangle dest, Vector2 origin, float rotation, Color tint)
 
@@ -81,7 +81,7 @@ void Renderer::drawMenu(const int &currentScore, const int &highScore, const Din
         WHITE);
 }
 
-void Renderer::drawStart(const int &currentScore, const int &highScore, const Dino &dino, const Rectangle *const currentDinoState, const Background (&bg)[2], const Object (&objects)[OBJECTS_COUNT])
+void Renderer::drawStart(const int &currentScore, const int &highScore, const Dino &dino, const Rectangle *const currentDinoState, const Background (&bg)[2], const ObjectData &objects)
 {
     // DrawTexturePro(Texture2D texture, Rectangle source, Rectangle dest, Vector2 origin, float rotation, Color tint)
 
@@ -104,7 +104,7 @@ void Renderer::drawStart(const int &currentScore, const int &highScore, const Di
         WHITE);
 }
 
-void Renderer::drawPlaying(const int &currentScore, const int &highScore, const Dino &dino, const Rectangle *const currentDinoState, const Background (&bg)[2], const Object (&objects)[OBJECTS_COUNT])
+void Renderer::drawPlaying(const int &currentScore, const int &highScore, const Dino &dino, const Rectangle *const currentDinoState, const Background (&bg)[2], const ObjectData &objects)
 {
     // Draw Dino
     DrawTexturePro(
@@ -136,13 +136,16 @@ void Renderer::drawPlaying(const int &currentScore, const int &highScore, const 
     // Draw OBJECTS
     for (unsigned char i = 0; i < OBJECTS_COUNT; i++)
     {
-        DrawTexturePro(
-            sprite,
-            {objects[i].x, objects[i].y, objects[i].width, objects[i].height},
-            {objects[i].positionX, objects[i].positionY, objects[i].getRenderWidth(), objects[i].getRenderHeight()},
-            {0.0f, 0.0f},
-            0.0f,
-            WHITE);
+        if (objects.currentObjectType[i] != None)
+        {
+            DrawTexturePro(
+                sprite,
+                {objects.x[i], objects.y[i], objects.width[i], objects.height[i]},
+                {objects.positionX[i], objects.positionY[i], objects.getRenderWidth(i), objects.getRenderHeight(i)},
+                {0.0f, 0.0f},
+                0.0f,
+                WHITE);
+        }
     }
 
     // Draw HI (TEXTURE)
@@ -164,7 +167,7 @@ void Renderer::drawPlaying(const int &currentScore, const int &highScore, const 
     DrawText(TextFormat("FPS: %02i", GetFPS()), 14, 14, 25, GRAY);
 }
 
-void Renderer::drawOver(const int &currentScore, const int &highScore, const Dino &dino, const Rectangle *const currentDinoState, const Background (&bg)[2], const Object (&objects)[OBJECTS_COUNT])
+void Renderer::drawOver(const int &currentScore, const int &highScore, const Dino &dino, const Rectangle *const currentDinoState, const Background (&bg)[2], const ObjectData &objects)
 {
     // Draw Dino
     DrawTexturePro(
@@ -195,13 +198,16 @@ void Renderer::drawOver(const int &currentScore, const int &highScore, const Din
 
     for (unsigned char i = 0; i < OBJECTS_COUNT; i++)
     {
-        DrawTexturePro(
-            sprite,
-            {objects[i].x, objects[i].y, objects[i].width, objects[i].height},
-            {objects[i].positionX, objects[i].positionY, objects[i].getRenderWidth(), objects[i].getRenderHeight()},
-            {0.0f, 0.0f},
-            0.0f,
-            WHITE);
+        if (objects.currentObjectType[i] != None)
+        {
+            DrawTexturePro(
+                sprite,
+                {objects.x[i], objects.y[i], objects.width[i], objects.height[i]},
+                {objects.positionX[i], objects.positionY[i], objects.getRenderWidth(i), objects.getRenderHeight(i)},
+                {0.0f, 0.0f},
+                0.0f,
+                WHITE);
+        }
     }
 
     // GAME-OVER
